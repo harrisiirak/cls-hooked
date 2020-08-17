@@ -346,8 +346,8 @@ function createNamespace(name) {
 
     },
     before(asyncId) {
-      currentUid = async_hooks.executionAsyncId();
-      let context;
+      const currentUid = async_hooks.executionAsyncId();
+      const context = namespace._contexts.get(currentUid);
 
       /*
       if(currentUid === 0){
@@ -359,9 +359,6 @@ function createNamespace(name) {
         context = namespace._contexts.get(currentUid);
       }
       */
-
-      //HACK to work with promises until they are fixed in node > 8.1.1
-      context = namespace._contexts.get(asyncId) || namespace._contexts.get(currentUid);
 
       if (context) {
         if (DEBUG_CLS_HOOKED) {
@@ -381,8 +378,9 @@ function createNamespace(name) {
       }
     },
     after(asyncId) {
-      currentUid = async_hooks.executionAsyncId();
-      let context; // = namespace._contexts.get(currentUid);
+      const currentUid = async_hooks.executionAsyncId();
+      const context = namespace._contexts.get(currentUid);
+
       /*
       if(currentUid === 0){
         // CurrentId will be 0 when triggered from C++. Promise events
@@ -393,8 +391,6 @@ function createNamespace(name) {
         context = namespace._contexts.get(currentUid);
       }
       */
-      //HACK to work with promises until they are fixed in node > 8.1.1
-      context = namespace._contexts.get(asyncId) || namespace._contexts.get(currentUid);
 
       if (context) {
         if (DEBUG_CLS_HOOKED) {
